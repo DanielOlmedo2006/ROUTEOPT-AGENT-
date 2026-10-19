@@ -14,10 +14,12 @@ from .env import AssignRoute, Env, Notify, Scenario
 from .logger import JsonlLogger, NullLogger
 
 
-def run_day(cfg: Config, seed: int, day: int, agent, log_path: str | None = None) -> dict:
+def run_day(cfg: Config, seed: int, day: int, agent, log_path: str | None = None,
+            logger=None) -> dict:
     """Una jornada completa: bucle percepción -> decisión -> acción, un ciclo por tick de 5 min simulados."""
     env = Env(Scenario(cfg, seed, day))
-    logger = JsonlLogger(log_path) if log_path else NullLogger()
+    if logger is None:
+        logger = JsonlLogger(log_path) if log_path else NullLogger()
     if hasattr(agent, "logger"):
         agent.logger = logger
     t = cfg.day_start
