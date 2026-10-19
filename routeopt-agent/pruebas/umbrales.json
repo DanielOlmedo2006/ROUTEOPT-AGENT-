@@ -1,0 +1,23 @@
+{
+  "fijado_antes_de_ejecutar": "2026-10-19",
+  "nota": "Umbrales y escenarios aplicables definidos antes de correr pruebas/run_fase3.py. Criterio de cumplimiento por escenario: la media de las 5 repeticiones cumple el umbral y al menos 4 de 5 repeticiones lo cumplen (M6 y M7 exigen 100 % en las 5).",
+  "repeticiones": 5,
+  "jornadas_por_repeticion": 10,
+  "semillas_base": 100,
+  "medidas": {
+    "M1": {"nombre": "Reduccion de distancia total vs. planificacion manual zonal", "formula": "100*(1 - suma_km_agente / suma_km_manual) sobre 10 jornadas", "operador": ">=", "umbral": 15.0, "unidad": "%",
+           "aplica": ["N1_base","N2_ventanas_estrechas","N3_volumen_alto","N4_volumen_bajo","N5_flota_reducida","L1_un_repartidor","L3_ventanas_extremas","A1_congestion_total","A2_incidentes_totales"]},
+    "M2": {"nombre": "Entregas dentro de su ventana de tiempo", "formula": "100*entregas con llegada <= cierre de ventana / entregas totales", "operador": ">=", "umbral": 95.0, "unidad": "%",
+           "aplica": ["N1_base","N2_ventanas_estrechas","N3_volumen_alto","N4_volumen_bajo","N5_flota_reducida","L1_un_repartidor","L2_un_pedido","L3_ventanas_extremas","A1_congestion_total","A2_incidentes_totales"]},
+    "M3": {"nombre": "Demora media de entrega (reformula 'tiempo promedio de entrega')", "formula": "promedio de (inicio de atencion - apertura de ventana) por pedido", "operador": "<=", "umbral": 30.0, "unidad": "min",
+           "aplica": ["N1_base","N2_ventanas_estrechas","N3_volumen_alto","N4_volumen_bajo","N5_flota_reducida","L1_un_repartidor","L2_un_pedido","L3_ventanas_extremas","A1_congestion_total","A2_incidentes_totales"]},
+    "M4": {"nombre": "Estabilidad: replanificaciones aceptadas por jornada", "formula": "promedio de replanificaciones aceptadas por jornada", "operador": "<=", "umbral": 3.0, "unidad": "replan/jornada",
+           "aplica": ["N1_base","N2_ventanas_estrechas","N3_volumen_alto","N4_volumen_bajo","N5_flota_reducida","L1_un_repartidor","L2_un_pedido","L3_ventanas_extremas","A1_congestion_total","A2_incidentes_totales"]},
+    "M5": {"nombre": "Balance de carga (reformula 'utilizacion de flota')", "formula": "promedio de (paradas del repartidor mas cargado / (pedidos / repartidores))", "operador": "<=", "umbral": 1.5, "unidad": "razon",
+           "aplica": ["N1_base","N2_ventanas_estrechas","N3_volumen_alto","N4_volumen_bajo","N5_flota_reducida","L3_ventanas_extremas","A1_congestion_total","A2_incidentes_totales"]},
+    "M6": {"nombre": "Robustez: jornadas completadas sin excepcion", "formula": "100*jornadas terminadas con todos los pedidos atendidos / jornadas ejecutadas", "operador": ">=", "umbral": 100.0, "unidad": "%",
+           "aplica": ["N1_base","N2_ventanas_estrechas","N3_volumen_alto","N4_volumen_bajo","N5_flota_reducida","L1_un_repartidor","L2_un_pedido","L3_ventanas_extremas","A1_congestion_total","A2_incidentes_totales","F1_sensor_sin_dato","F2_entradas_invalidas"]},
+    "M7": {"nombre": "Deteccion de entradas invalidas (seccion 4: datos incompletos)", "formula": "100*pedidos invalidos rechazados o reportados por el agente / pedidos invalidos inyectados", "operador": ">=", "umbral": 100.0, "unidad": "%",
+           "aplica": ["F2_entradas_invalidas"]}
+  }
+}
