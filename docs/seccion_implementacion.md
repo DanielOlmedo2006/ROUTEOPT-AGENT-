@@ -1,9 +1,4 @@
-# Borrador: sección nueva para el documento de diseño
 
-Este borrador está en tercera persona y tono formal para pegarlo en el documento. Los datos entre
-corchetes deben completarse con la URL real del repositorio.
-
----
 
 ## 10. Implementación del agente
 
