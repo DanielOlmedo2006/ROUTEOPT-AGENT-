@@ -29,15 +29,27 @@ st.set_page_config(page_title="ROUTEOPT | Centro de operaciones", page_icon="�
 st.markdown(
     """
     <style>
-    .stApp { background: #f4f7fb; }
-    [data-testid="stSidebar"] { background: #101d33; }
-    [data-testid="stSidebar"] * { color: #eef4ff; }
+    .stApp, [data-testid="stSidebar"] {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            "Segoe UI Emoji", "Noto Sans", "Noto Color Emoji", sans-serif;
+    }
+    .stApp { background: var(--background-color); color: var(--text-color); }
+    [data-testid="stSidebar"] {
+        background: var(--secondary-background-color);
+        color: var(--text-color);
+    }
+    [data-testid="stSidebar"] * { color: inherit; }
     .hero { padding: 1.5rem 1.8rem; border-radius: 18px; color: #f7fbff;
             background: linear-gradient(115deg, #10213c, #1a4963 68%, #278b83); }
     .hero h1 { margin: 0; font-size: 2.2rem; }
     .hero p { margin: .5rem 0 0; color: #d4e5f2; }
-    div[data-testid="stMetric"] { background: white; padding: 1rem;
-        border: 1px solid #e5eaf1; border-radius: 12px; }
+    div[data-testid="stMetric"] {
+        background: var(--secondary-background-color);
+        color: var(--text-color);
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -205,7 +217,7 @@ with tab_ops:
             + base_chart.mark_circle(size=75)
             + base_chart.mark_text(dy=-11, fontSize=9).encode(text="etiqueta:N")
         ).properties(height=440)
-        st.altair_chart(route_chart, use_container_width=True)
+        st.altair_chart(route_chart, width="stretch")
         st.caption("La secuencia se reconstruye a partir de las entregas simuladas; el depósito está en el centro.")
     else:
         st.warning("No se encontraron entregas para dibujar la ruta.")
@@ -222,7 +234,7 @@ with tab_ops:
                 "Distancia (km)": round(event["dist_km"], 2),
             }
         )
-    st.dataframe(pd.DataFrame(delivery_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(delivery_rows), width="stretch", hide_index=True)
 
 with tab_learning:
     st.markdown("#### Rendimiento por jornada")
@@ -243,7 +255,7 @@ with tab_learning:
         comparison["reduccion_km_vs_manual_pct"] = comparison["distancia_total_km"].apply(
             lambda value: 100 * (1 - value / baseline_km)
         )
-    st.dataframe(comparison.round(2), use_container_width=True, hide_index=True)
+    st.dataframe(comparison.round(2), width="stretch", hide_index=True)
 
     traffic_rows = []
     for event in result["records"]:
@@ -259,7 +271,10 @@ with tab_learning:
             )
     if traffic_rows:
         st.markdown("#### Tráfico percibido por los sensores")
-        st.line_chart(pd.DataFrame(traffic_rows), x="hora", y="factor", color="zona", height=300)
+        st.line_chart(
+            pd.DataFrame(traffic_rows), x="hora", y="factor", color="zona",
+            height=300, width="stretch",
+        )
     st.caption(
         f"Jornadas aprendidas por ROUTEOPT: {int(route_metrics['day'])}. "
         "La memoria de tráfico y servicio se mantiene al avanzar entre jornadas de esta ejecución."
@@ -282,7 +297,7 @@ with tab_trace:
             }
             for event in decision_events
         ]
-        st.dataframe(pd.DataFrame(decision_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(decision_rows), width="stretch", hide_index=True)
     with right:
         st.markdown("#### Acciones enviadas")
         action_rows = [
@@ -295,7 +310,7 @@ with tab_trace:
             }
             for event in action_events
         ]
-        st.dataframe(pd.DataFrame(action_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(action_rows), width="stretch", hide_index=True)
 
     log_jsonl = "\n".join(json.dumps(event, ensure_ascii=False) for event in result["records"])
     st.download_button(
